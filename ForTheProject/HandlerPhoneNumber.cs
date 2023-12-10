@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ForTheProject
 {
-    internal class HandlerPhoneNumber
+    public sealed class HandlerPhoneNumber
     {
         static readonly HandlerPhoneNumber instance = new HandlerPhoneNumber();
 
@@ -39,8 +39,8 @@ namespace ForTheProject
 
 
             //seed the table
-            AddPerson(newP1);
-            AddPerson(newP2);
+            AddPhone(newP1);
+            AddPhone(newP2);
         }
 
         public static HandlerPhoneNumber Instance
@@ -65,7 +65,7 @@ namespace ForTheProject
             }
         }
 
-        public int AddPerson(PhoneNumber phoneNumber)
+        public int AddPhone(PhoneNumber phoneNumber)
         {
             int rows = 0;
             int newId = 0;
@@ -98,5 +98,36 @@ namespace ForTheProject
             }
             return newId;
         }
+
+        public int UpdatePhone(PhoneNumber phoneNumber)
+        {
+            int row = 0;
+
+            using (SQLiteConnection conn = new SQLiteConnection(Constring))
+            {
+                conn.Open();
+
+                string query = "UPDATE Phone SET Number = @Number , Type = @Type, ResumeId = @ResumeId WHERE Id = @Id";
+
+
+                SQLiteCommand updatecom = new SQLiteCommand(query, conn);
+                updatecom.Parameters.AddWithValue("@Id", phoneNumber.PhoneNumberId);
+                updatecom.Parameters.AddWithValue("@Number", phoneNumber.Number);
+                updatecom.Parameters.AddWithValue("@Type", phoneNumber.Type);
+                updatecom.Parameters.AddWithValue("@ResumeId", phoneNumber.ResumeId);
+                
+                try
+                {
+                    row = updatecom.ExecuteNonQuery();
+                }
+                catch (SQLiteException e)
+                {
+                    Console.WriteLine("Error Generated. Details:" + e.ToString());
+                }
+
+            }
+            return row;
         }
+
+    }
 }

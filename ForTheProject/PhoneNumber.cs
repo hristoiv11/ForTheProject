@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ForTheProject
 {
-    class PhoneNumber
+    public class PhoneNumber
     {
         public int PhoneNumberId { get; set; }
         public string Number { get; set; }
