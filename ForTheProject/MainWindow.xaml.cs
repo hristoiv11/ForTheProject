@@ -24,5 +24,10 @@ namespace ForTheProject
         {
             InitializeComponent();
         }
+
+        private void PhoneNumber_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
