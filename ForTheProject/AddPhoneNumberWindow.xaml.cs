@@ -19,20 +19,28 @@ namespace ForTheProject
     /// </summary>
     public partial class AddPhoneNumberWindow : Window
     {
+        public string PhoneNumber { get; private set; }
+        public string PhoneType { get; private set; }
+
         public AddPhoneNumberWindow()
         {
             InitializeComponent();
         }
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
+        private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            PhoneNumber phoneNumber = new PhoneNumber();
-            phoneNumber.Number = phoneNumberTextBox.Text;
-            phoneNumber.Type = typeTextBox.Text;
+            // Set properties based on user input
+            PhoneNumber = phoneNumberTextBox.Text;
+            PhoneType = typeTextBox.Text;
 
-            HandlerPhoneNumber pn = HandlerPhoneNumber.Instance;
-            pn.AddPhone(phoneNumber);
-            Close();
+            // Close the window and return true to indicate success
+            DialogResult = true;
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Close the window and return false to indicate cancellation
+            DialogResult = false;
         }
     }
 }

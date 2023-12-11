@@ -12,7 +12,7 @@ namespace ForTheProject
     {
         static readonly HandlerPhoneNumber instance = new HandlerPhoneNumber();
 
-        static readonly string Constring = ConfigurationManager.ConnectionStrings["MyDB"].ConnectionString;
+        public static readonly string Constring = ConfigurationManager.ConnectionStrings["MyDB"].ConnectionString;
 
         private HandlerPhoneNumber()
         {
@@ -39,8 +39,8 @@ namespace ForTheProject
 
 
             //seed the table
-            AddPhone(newP1);
-            AddPhone(newP2);
+            AddPhone(newP1.Number,newP1.Type);
+            AddPhone(newP2.Number, newP2.Type);
         }
 
         public static HandlerPhoneNumber Instance
@@ -65,37 +65,42 @@ namespace ForTheProject
             }
         }
 
-        public int AddPhone(PhoneNumber phoneNumber)
+        private int AddPhone(string phoneNumber, string phoneType)
         {
+            // Implement your AddPhone method logic here, using the SQLite code provided
+            // Ensure to use the SQLite operations for inserting a new phone number
+            // Return the newId or handle it as needed
+
             int rows = 0;
             int newId = 0;
+
             using (SQLiteConnection con = new SQLiteConnection(Constring))
             {
-
                 con.Open();
+
                 string query = "INSERT INTO PERSONS (Number,Type) VALUES (@Number, @Type)";
                 SQLiteCommand insertcom = new SQLiteCommand(query, con);
 
-                insertcom.Parameters.AddWithValue("@Number", phoneNumber.Number);
-                insertcom.Parameters.AddWithValue("@Type", phoneNumber.Type);
-
+                insertcom.Parameters.AddWithValue("@Number", phoneNumber);
+                insertcom.Parameters.AddWithValue("@Type", phoneType);
 
                 try
                 {
                     rows = insertcom.ExecuteNonQuery();
-                    //lets get the rowid inserted
+
+                    // Get the rowid inserted
                     insertcom.CommandText = "select last_insert_rowid()";
                     Int64 LastRowID64 = Convert.ToInt64(insertcom.ExecuteScalar());
-                    //then grab the bottom 32 bits as the unique id of the row
+
+                    // Grab the bottom 32 bits as the unique id of the row
                     newId = Convert.ToInt32(LastRowID64);
-
                 }
-                catch (SQLiteException e)
+                catch (SQLiteException ex)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ex.Message);
                 }
-
             }
+
             return newId;
         }
 
