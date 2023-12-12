@@ -19,8 +19,6 @@ namespace ForTheProject
     /// </summary>
     public partial class AddPhoneNumberWindow : Window
     {
-        public string PhoneNumber { get; private set; }
-        public string PhoneType { get; private set; }
 
         public AddPhoneNumberWindow()
         {
@@ -29,12 +27,14 @@ namespace ForTheProject
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            // Set properties based on user input
-            PhoneNumber = phoneNumberTextBox.Text;
-            PhoneType = typeTextBox.Text;
+            PhoneNumber newPhone = new PhoneNumber();
+            newPhone.Number = phoneNumberTextBox.Text;
+            newPhone.Type = typeTextBox.Text;
+            
 
-            // Close the window and return true to indicate success
-            DialogResult = true;
+            HandlerPhoneNumber db = HandlerPhoneNumber.Instance;
+            db.AddPhone(newPhone);
+            Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

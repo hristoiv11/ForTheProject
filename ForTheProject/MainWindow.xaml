@@ -5,14 +5,101 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ForTheProject"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-            <StackPanel Margin="10">
-                <ListBox x:Name="phoneNumberListBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="300" Height="200" DisplayMemberPath="DisplayInfo" />
-                <Button Content="Add Phone Number" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Click="AddPhoneNumber_Click" />
-            </StackPanel>
-        
+        Title="MainWindow" Height="1450" Width="800">
+    <Window.Resources>
+        <!-- Style for the headings -->
+        <Style x:Key="HeadingStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Courier New"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
 
+        <!-- Common style for grid cells -->
+        <Style x:Key="CellStyle" TargetType="Grid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Margin" Value="0,5,0,0"/>
+            <Setter Property="Height" Value="150"/>
+           
+
+
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Style="{StaticResource CellStyle}">
+            <TextBlock Style="{StaticResource HeadingStyle}" Text="Your Name Here"/>
+           
+        </Grid>
+
+      
+
+      
+        <Grid Grid.Row="1" Style="{StaticResource CellStyle}">
+            <TextBlock Style="{StaticResource HeadingStyle}" Text="Work Experience"/>
+         
+        </Grid>
+
+  
+        <Grid Grid.Row="2" Style="{StaticResource CellStyle}">
+            <StackPanel>
+                <TextBlock Style="{StaticResource HeadingStyle}" Text="Education"/>
+
+                <DataGrid x:Name="AllEducationGrid" SelectionChanged="AllEducationGrid_SelectionChanged" RenderTransformOrigin="0.235,0.263"/>
+              
+
+                <Button Content="Add Education" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Click="AddEducation_Click" />
+            </StackPanel>
+        </Grid>
+
+
+        <!-- Row 4 -->
+        <Grid Grid.Row="3" Style="{StaticResource CellStyle}">
+            <TextBlock Style="{StaticResource HeadingStyle}" Text="Hobbies"/>
+            
+        </Grid>
+
+        <!-- Row 5 -->
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            
+            <Grid Grid.Column="0">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource HeadingStyle}" Text="References"/>
+
+                    <DataGrid x:Name="ReferencesGrid" SelectionChanged="ReferencesGrid_SelectionChanged" RenderTransformOrigin="0.235,0.263"/>
+                    
+
+                    <Button Content="AddReference" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Click="AddReference_Click" />
+                </StackPanel>
+            </Grid>
+
+
+
+            <Grid Grid.Column="1">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource HeadingStyle}" Text="Phone Number"/>
+                    <DataGrid x:Name="AllPhoneNumberDataGrid" SelectionChanged="AllPhoneNumberGrid_SelectionChanged"/>
+                    <Button Content="Add Phone Number" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Click="AddPhoneNumber_Click" />
+                   
+                </StackPanel>
+                
+            </Grid>
+           
+            
+        </Grid>
     </Grid>
 </Window>

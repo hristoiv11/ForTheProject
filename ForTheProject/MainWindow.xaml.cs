@@ -20,23 +20,37 @@ namespace ForTheProject
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
+        
     {
-        private List<PhoneNumber> phoneNumbers;
+        HandlerPhoneNumber db = HandlerPhoneNumber.Instance;
+         List<PhoneNumber> phoneNumbers;
         
 
         public MainWindow()
         {
             InitializeComponent();
+            RefreshhAllPhoneNumberList();
 
-            // Initialize the List and add your sample phone numbers
-            phoneNumbers = new List<PhoneNumber>
+            
+        }
+
+        private void RefreshhAllPhoneNumberList()
+        {
+            AllPhoneNumberDataGrid.ItemsSource = null;
+            phoneNumbers = db.ReadAllPhoneNumbers();
+            AllPhoneNumberDataGrid.ItemsSource = phoneNumbers;
+        }
+
+        private void AllPhoneNumberGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            PhoneNumber phoneNumber = (PhoneNumber)AllPhoneNumberDataGrid.SelectedItem;
+
+            if (phoneNumber != null)
             {
-                new PhoneNumber { Number = "450-444-2312", Type = "Work" },
-                new PhoneNumber { Number = "450-312-444", Type = "Home" }
-            };
-
-            // Set the List as the data context for the ListBox
-            phoneNumberListBox.ItemsSource = phoneNumbers;
+                PhoneNumberDetailsWindow personDetailsWindow = new PhoneNumberDetailsWindow(phoneNumber);
+                personDetailsWindow.ShowDialog();
+                RefreshhAllPhoneNumberList();
+            }
         }
 
         private void AddPhoneNumber_Click(object sender, RoutedEventArgs e)
@@ -44,33 +58,33 @@ namespace ForTheProject
             AddPhoneNumberWindow addPhoneNumberWindow = new AddPhoneNumberWindow();
 
             
-            if (addPhoneNumberWindow.ShowDialog() == true)
-            {
-                // Retrieve user input from the window
-                string phoneNumber = addPhoneNumberWindow.PhoneNumber;
-                string phoneType = addPhoneNumberWindow.PhoneType;
-
-                // Create a new PhoneNumber object
-                PhoneNumber newPhoneNumber = new PhoneNumber
-                {
-                    Number = phoneNumber,
-                    Type = phoneType,
-                    // Set other properties as needed
-                };
-
-                // Call the AddPhone method to save it to the database and get the newId
-                int newId = AddPhone(newPhoneNumber);
-
-                // Add the new phone number to the List
-                phoneNumbers.Add(newPhoneNumber);
-
-                
-            }
+            addPhoneNumberWindow.ShowDialog();
+            RefreshhAllPhoneNumberList();
         }
-        
 
+        private void AllReferencesGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
+        }
 
+        private void AddEducation_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void AddReference_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AllEducationGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void ReferencesGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
 

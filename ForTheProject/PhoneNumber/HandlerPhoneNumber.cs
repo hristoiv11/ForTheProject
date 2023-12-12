@@ -12,7 +12,7 @@ namespace ForTheProject
     {
         static readonly HandlerPhoneNumber instance = new HandlerPhoneNumber();
 
-        public static readonly string Constring = ConfigurationManager.ConnectionStrings["MyDB"].ConnectionString;
+        static readonly string Constring = ConfigurationManager.ConnectionStrings["MyDB"].ConnectionString;
 
         private HandlerPhoneNumber()
         {
@@ -39,8 +39,8 @@ namespace ForTheProject
 
 
             //seed the table
-            AddPhone(newP1.Number,newP1.Type);
-            AddPhone(newP2.Number, newP2.Type);
+            AddPhone(newP1);
+            AddPhone(newP2);
         }
 
         public static HandlerPhoneNumber Instance
@@ -59,13 +59,13 @@ namespace ForTheProject
                 SQLiteCommand command1 = new SQLiteCommand(drop, con);
                 command1.ExecuteNonQuery();
 
-                string table = "create table PERSONS (PhoneNumberId integer primary key, Number text, Type text);";
+                string table = "create table PhoneNumber (PhoneNumberId integer primary key, Number text, Type text);";
                 SQLiteCommand command2 = new SQLiteCommand(table, con);
                 command2.ExecuteNonQuery();
             }
         }
 
-        private int AddPhone(string phoneNumber, string phoneType)
+        public int AddPhone(PhoneNumber phoneNumber)
         {
             // Implement your AddPhone method logic here, using the SQLite code provided
             // Ensure to use the SQLite operations for inserting a new phone number
@@ -78,11 +78,11 @@ namespace ForTheProject
             {
                 con.Open();
 
-                string query = "INSERT INTO PERSONS (Number,Type) VALUES (@Number, @Type)";
+                string query = "INSERT INTO PhoneNumber (Number,Type) VALUES (@Number, @Type)";
                 SQLiteCommand insertcom = new SQLiteCommand(query, con);
 
-                insertcom.Parameters.AddWithValue("@Number", phoneNumber);
-                insertcom.Parameters.AddWithValue("@Type", phoneType);
+                insertcom.Parameters.AddWithValue("@Number", phoneNumber.Number);
+                insertcom.Parameters.AddWithValue("@Type", phoneNumber.Type);
 
                 try
                 {
@@ -90,7 +90,7 @@ namespace ForTheProject
 
                     // Get the rowid inserted
                     insertcom.CommandText = "select last_insert_rowid()";
-                    Int64 LastRowID64 = Convert.ToInt64(insertcom.ExecuteScalar());
+                    long LastRowID64 = Convert.ToInt64(insertcom.ExecuteScalar());
 
                     // Grab the bottom 32 bits as the unique id of the row
                     newId = Convert.ToInt32(LastRowID64);
@@ -112,7 +112,7 @@ namespace ForTheProject
             {
                 conn.Open();
 
-                string query = "UPDATE Phone SET Number = @Number , Type = @Type, ResumeId = @ResumeId WHERE Id = @Id";
+                string query = "UPDATE PhoneNumber SET Number = @Number , Type = @Type, ResumeId = @ResumeId WHERE Id = @Id";
 
 
                 SQLiteCommand updatecom = new SQLiteCommand(query, conn);
@@ -120,7 +120,7 @@ namespace ForTheProject
                 updatecom.Parameters.AddWithValue("@Number", phoneNumber.Number);
                 updatecom.Parameters.AddWithValue("@Type", phoneNumber.Type);
                 updatecom.Parameters.AddWithValue("@ResumeId", phoneNumber.ResumeId);
-                
+
                 try
                 {
                     row = updatecom.ExecuteNonQuery();
@@ -133,6 +133,41 @@ namespace ForTheProject
             }
             return row;
         }
+        public List<PhoneNumber> ReadAllPhoneNumbers()
+        {
+            List<PhoneNumber> listPhoneNumbers = new List<PhoneNumber>();
 
+            using (SQLiteConnection conn = new SQLiteConnection(Constring))
+            {
+                conn.Open();
+                SQLiteCommand com = new SQLiteCommand("Select * from PhoneNumber", conn);
+
+                using (SQLiteDataReader reader = com.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        PhoneNumber phoneNumber = new PhoneNumber();
+                        if (int.TryParse(reader["Id"].ToString(), out int id2))
+                        {
+                            phoneNumber.PhoneNumberId = id2;
+                        }
+
+                        phoneNumber.Number = reader["Number"].ToString();
+                        phoneNumber.Type = reader["Type"].ToString();
+
+
+
+
+                        listPhoneNumbers.Add(phoneNumber);
+                    }
+                }
+
+            }
+
+            return listPhoneNumbers;
+
+        }
     }
+
 }
+

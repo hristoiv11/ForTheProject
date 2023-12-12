@@ -1,0 +1,32 @@
+﻿<Window x:Class="ForTheProject.PhoneNumberDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ForTheProject"
+        mc:Ignorable="d"
+        Title="PhoneNumberDetailsWindow" Height="450" Width="800">
+    <Grid>
+        <StackPanel Margin="10" >
+            <Label Content="Person Details Window" Style="{StaticResource TitleLabelStyle}"/>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Number :  "/>
+                <TextBlock x:Name="NumberTextBox" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Type : "/>
+                <TextBlock x:Name="TypeTextBox" />
+            </StackPanel>
+
+            
+
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="UpdateBTN" Content="Update" Click="UpdateBTN_Click"/>
+                <Button x:Name="DeleteBTN" Content="Delete" Click="DeleteBTN_Click"/>
+
+            </StackPanel>
+        </StackPanel>
+        
+    </Grid>
+</Window>
